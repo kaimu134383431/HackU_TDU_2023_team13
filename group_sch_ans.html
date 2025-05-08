@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>検索結果-TDU教室予約</title>
+    <link rel="stylesheet" href="css/sch.css">
+    <script src="js/format.js"></script>
+</head>
+<body>
+
+        <!-- ==================== Header ========================== -->
+
+        <div id = "top1">
+            <a href = "home.html"><img src = "image/pook_logo.png" style = "clip-path: circle(50%);pointer-events: auto;"></a>
+        </div>
+
+            <!-- グローバルナビゲーション -->
+            <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" href="css/home.css">
+            </head>
+                
+                
+                <nav>
+                <ul class="gnav-navi-1">
+                <li><a href="home.html">HOME<br>ホーム</a></li>
+                <li><a href="indiv.html">INDIVIDUAL<br>個人利用の方</a></li>
+                <li><a href="group.html">GROUP<br>学生団体の方</a></li>
+                <li><a href="inquiry.php">CONTACT<br>お問い合わせ</a></li>
+                </ul>
+                </nav>
+            <!--グローバルナビゲーション-fin-->
+
+        <div id = "top2">
+            <b>SEARCH - 検索</b>
+        </div>
+
+            <!-- ===================== Header-fin ====================== -->
+    
+    <h2 id="headline">検索結果</h2>
+
+    <div class = box_search>
+
+        <h3>
+            <span id = "outputDate" style="background-color:#f8e58c"></span> の
+            <span id = "outputTime" style="background-color:#f8e58c"></span> に
+            <span id = "outputUsers" style="background-color:#f8e58c"></span> 人で
+            借りられる空き教室一覧
+
+            <div class = "space"></div> <!-- for margin -->
+
+            <table id = "output" border = "5" bordercolor = "#593c22" width = "75%" align = "center"></table>
+
+            <div class = "space"></div>
+
+            <div style = "font-size: 15px;font-family: Arial;">　<a href = group_sch.html>検索画面へ戻る</a></div>
+            
+        </h3>
+
+    </div>
+
+    <!-- Footer -->
+    <div id = "bottom">
+        <p>Tabekake - pudding</p><br>
+        <p>links</p>
+        <a href="https://www.dendai.ac.jp" style="color: white;">東京電機大学HP </a>
+    </div>  
+
+        
+
+    <script>
+
+        csv_open('csv/data.csv');
+
+        const date = getQueryVariable('date');
+        const time = getQueryVariable('time');
+        const users = getQueryVariable('people');
+        document.getElementById('outputDate').textContent = `${date}`;
+        document.getElementById('outputTime').textContent = `${time}`;
+        document.getElementById('outputUsers').textContent = `${users}`;
+
+        // Get Query Variable
+        function getQueryVariable(variable)
+        {
+            const query = window.location.search.substring(1);
+            const vars = query.split('&');
+            for(let i = 0 ; i < vars.length ; i++)
+            {
+                const pair = vars[i].split('=');
+                if(pair[0] == variable)
+                {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return null;
+        }
+
+        // Open csv File
+        function csv_open(dataPath)
+        {
+            const request = new XMLHttpRequest();
+            request.addEventListener('load', (event) => {
+                const response = event.target.responseText;
+                csv_array(response);
+            });
+            request.open('GET', dataPath, true);
+            request.send();
+        }
+
+        // Make Table
+        function csv_array(data)
+        {
+            const dataLine = data.split('\n');
+            const dateSplit = date.split('-');
+            const timeSplit = time.split('~');
+            let rvData = []; // csvData Array
+            let NGlist = [3111, 3112, 3311, 6100, 8311, 213, 203, 204, 201, 11101, 221, 224, 225, 226, 227, 228, 229, 321, 324, 325, 326, 327, 328, 329, 12424, 12427, 12421, 12410, 12403]; // Already Reserved
+            let shownList = []; // Already Shown
+            let rvDateSplit;
+            let rvTimeSplit;
+            let insertTable = '<tr bgcolor="#593c22"><th>号館</th><th>教室</th><th>予約</th></tr>';
+
+            let testtt = '';
+
+            // csvData => Array
+            for(let i = 0 ; i < dataLine.length ; i++)
+            {
+                rvData[i] = dataLine[i].split(',');
+            }
+
+            // Make NG List
+            for(let i = 1 ; i < dataLine.length ; i++)
+            {
+
+
+
+
+                // Check Room Number
+                if(Number(rvData[i][2]) < Number(users))
+                {
+                    //pushNG(rvData[i][2], NGlist);
+                    
+                    if(notExists(rvData[i][1], NGlist))
+                    {
+                        NGlist.push(rvData[i][1]);
+                    }
+                    
+                    continue;
+                }
+
+                if(rvData[i].length == 5)
+                {
+                    rvDateSplit = rvData[i][3].split('/');
+                    rvTimeSplit = rvData[i][4].split('~');
+
+                    // Check Date
+                    if(Number(rvDateSplit[0]) == Number(dateSplit[0]) && Number(rvDateSplit[1]) == Number(dateSplit[1]) && Number(rvDateSplit[2]) == Number(dateSplit[2]))
+                    {
+                        // Check Time
+                        if(parseTime(rvTimeSplit[1]) >= parseTime(timeSplit[0]) && parseTime(timeSplit[1]) >= parseTime(rvTimeSplit[0]))
+                        {
+                            if(notExists(rvData[i][1], NGlist))
+                            {
+                                NGlist.push(rvData[i][1]);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            // Make HTML Table
+            for(let i = 1 ; i < dataLine.length ; i++)
+            {
+
+                // Check Building Number
+                if(Number(rvData[i][0]) == 1 || Number(rvData[i][0]) == 2 || Number(rvData[i][0]) == 4 || Number(rvData[i][0]) == 5 || Number(rvData[i][0]) == 7 || Number(rvData[i][0]) == 9)
+                {
+                    continue;
+                }
+
+                if(rvData[i].length != 3 && rvData[i].length != 5)
+                {
+                    continue;
+                }
+
+                if(unavailable(rvData[i][1], NGlist))
+                {
+                    continue;
+                }
+                if(unavailable(rvData[i][1], shownList))
+                {
+                    continue;
+                }
+
+                insertTable += '<tr>';
+                insertTable += `<td>${rvData[i][0]}</td>`;
+                insertTable += `<td>${rvData[i][1]}</td>`;
+                insertTable += `<td><a href = info.php?room=${rvData[i][1]}&time=${time}&date=${date}&people=${users}>選択</a></td>`;
+                insertTable += '</tr>';
+
+                shownList.push(rvData[i][1]);
+
+            }
+
+            // Show Data
+            output.innerHTML = insertTable;
+
+            //test.innerHTML = testtt;
+
+        }
+
+        // Already Exists in the List?
+        function notExists(roomNum, list)
+        {
+            for(let i = 0 ; i < list.length ; i++)
+            {
+                if(Number(roomNum) == Number(list[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Already Exists in the List?
+        function unavailable(roomNum, list)
+        {
+            for(let i = 0 ; i < list.length ; i++)
+            {
+                if(Number(roomNum) == Number(list[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+    </script>
+
+</body>
+</html>

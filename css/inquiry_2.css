@@ -1,0 +1,50 @@
+@charset "uft-8";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.top {
+    background-color: #593c22;
+}
+.top-moji {
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 140%;
+}
+.min {
+    float: left;
+    margin-right: 20px;
+    width: 500px;
+    border-left: 5px solid #593c22;
+    padding-left: 15px;
+}
+.button {
+    background-color:#593c22;
+    border: none;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    font-size: 100%;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 25px;
+
+}
+.buttoncenter {
+    text-align: center;
+    margin-top: 50px;
+}
+form > .big{
+    padding-left: 15%;
+}
+form{
+    font-size: 20px;
+    background-color: #f8ebd0;
+}
+
+.min_2_1{
+    text-align: left;
+    padding-right: 15%;
+}

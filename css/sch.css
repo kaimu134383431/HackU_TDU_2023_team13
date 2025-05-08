@@ -1,0 +1,58 @@
+@charset "utf-8";
+
+.linked-area {
+    border: 2px solid black;
+}
+
+/*
+.box
+{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 100px;
+    border: 2px solid #dcdddd;
+    text-align: center;
+    background-color: #ffffff;
+    
+}
+*/
+
+.box_search
+{
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 100px;
+    margin-top: 10px;
+    /* border: 3px solid white; */
+    background-color: #ffffff
+}
+
+#output
+{
+    margin: auto;
+}
+
+#output th
+{
+    color: white;
+}
+
+button{
+    font-size: 20px; 
+    font-family: Arial;
+}
+
+#search
+{
+    text-align: center;
+}
+
+.space
+{
+    margin-top: 30px;
+}

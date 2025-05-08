@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang = "ja">
+	<head>
+		<meta charset = "utf-8">
+		<title>団体館内マップ-ぷっく</title>
+		<link rel="stylesheet" href="css/map_group.css">
+		<meta http-equiv="Cache-Control" content="no-store" />
+
+		<script src="js/checkReservation.js"></script>
+		<script src="js/format.js"></script>
+		<script src="js/getCsv.js"></script>
+		<script src="js/handleMap.js"></script>
+		
+	</head>
+	<body>
+
+		<div id = "top1">
+			<a href = "home.html"><img src = "image/pook_logo.png" style = "clip-path: circle(50%);pointer-events: auto;"></a>
+		</div>
+
+            <!-- グローバルナビゲーション -->
+            <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" href="css/map_group.css">
+            </head>
+                
+                
+                <nav>
+                <ul class="gnav-navi-1">
+                <li><a href="home.html">HOME<br>ホーム</a></li>
+                <li><a href="indiv.html">INDIVIDUAL<br>個人利用の方</a></li>
+                <li><a href="group.html">GROUP<br>学生団体の方</a></li>
+                <li><a href="inquiry.php">CONTACT<br>お問い合わせ</a></li>
+                </ul>
+                </nav>
+            <!--グローバルナビゲーション-fin-->
+
+
+		<div id = "top2">
+            <b>FACILITY MAP - 号館マップ</b>
+        </div>
+
+		<div class="buttoncenter">       
+            <button onclick = "location.href='group_map_1.html'" class = "page_button">全体マップへ戻る</button>
+        </div>
+		
+		<h2 id="headline">11・12号館マップ</h2>
+		<!-- <div style = "font-size: 15px;font-family: Arial;">　<a href = group_map_1.html>全体マップへ戻る</a></div> -->
+		
+		<div id="DayandTimeContainer">
+			<h3><label for="reservationDate">　予約日時:</label>
+				<input type="date" id="reservationDate" name="reservationDate" style="font-size: 20px; font-family: Arial;">
+				<span id="cautionReservation"></span>
+				
+				<label for="startTime">
+				<input type="time" id="startTime" name="startTime" style="font-size: 20px; font-family: Arial;">
+				～
+				<label for="endTime">
+					<input type="time" id="endTime" name="endTime" style="font-size: 20px; font-family: Arial;">
+				<script>
+					window.addEventListener('load', function() {
+						const recaution = document.getElementById("cautionReservation");
+						// recaution.innerHTML = "(直近3日間の予約は不可能です)";
+    					const currentDate = new Date();
+					
+    					// 予約日のinputタグ
+    					const reservatingDate = document.getElementById("reservationDate");
+    					reservatingDate.value = formatDate(currentDate); // 今日の日付を設定
+					
+    					// 開始時刻のinputタグ
+					
+    					const stTime = document.getElementById("startTime");
+    					stTime.value = formatTime(currentDate); // 現在時刻を設定
+					
+					
+    					// 終了時刻のinputタグ
+    					const enTime = document.getElementById("endTime");
+
+					
+    					const oneHourLater = new Date(currentDate);
+   						oneHourLater.setHours(oneHourLater.getHours() + 1); // 現在時刻から1時間後
+    					enTime.value = formatTime(oneHourLater); // 1時間後の時刻を設定
+						checkAllReservationTimes("12",5);
+  					});
+
+					const reservatingDate = document.getElementById("reservationDate");
+					const stTime = document.getElementById("startTime");
+					const enTime = document.getElementById("endTime");
+					let isReservableDate = false;
+
+					reservatingDate.addEventListener("change", function(){
+						const currentDate = new Date();
+						const startReservationDate = new Date(currentDate);
+						const endReservationDate = new Date(currentDate);
+						const today = formatDate(currentDate);
+						
+						startReservationDate.setDate(currentDate.getDate() + 3); // 3日後の日付に変更
+						const after3days = formatDate(startReservationDate);
+						endReservationDate.setDate(currentDate.getDate() + 14); // 2週間後の日付に変更
+						const after2weeks = formatDate(endReservationDate);
+						
+						const recaution = document.getElementById("cautionReservation");
+						
+						checkAllReservationTimes("12",5);
+
+						if( today <= reservatingDate.value && reservatingDate.value < after3days ){
+                            // recaution.innerHTML = "(直近3日間の予約は不可能です)";
+                            recaution.innerHTML = "";
+                            alert("直近3日間の予約は不可能です");
+                            reservatingDate.value = "";
+                            isReservableDate = false;
+                        }
+						else if( after3days <= reservatingDate.value && reservatingDate.value <= after2weeks ){
+							recaution.innerHTML = "";
+							isReservableDate = true;
+						}
+						else{
+							recaution.innerHTML = "";
+							alert("表示できるのは本日から2週間後までです");
+    						reservatingDate.value = "";
+							isReservableDate = false;
+						}
+					});
+
+					stTime.addEventListener("change", function() {
+						checkAllReservationTimes("12",5);
+  					if (stTime.value && enTime.value && stTime.value >= enTime.value) {
+    					alert("開始時刻は終了時刻より後の時刻になるようにしてください。");
+    					stTime.value = "";
+  						}
+					});
+
+					enTime.addEventListener("change", function() {
+						checkAllReservationTimes("12",5);
+  					if (stTime.value && enTime.value && stTime.value >= enTime.value) {
+    					alert("開始時刻は終了時刻より後の時刻になるようにしてください。");
+    					enTime.value = "";
+  						}
+					});
+				</script>
+				<span>
+					<button type="button" id="fillButton1" period="1">①限</button>
+					<button type="button" id="fillButton2" period="2">②限</button>
+					<button type="button" id="fillButton3" period="3">③限</button>
+					<button type="button" id="fillButton4" period="4">④限</button>
+					<button type="button" id="fillButton5" period="5">⑤限</button>
+				</span>
+				<script>
+					document.getElementById("fillButton1").addEventListener("click", function(){
+						stTime.value="09:20";
+						enTime.value="11:00";
+						checkAllReservationTimes("12",5);
+					});
+					document.getElementById("fillButton2").addEventListener("click", function(){
+						stTime.value="11:10";
+						enTime.value="12:50";
+						checkAllReservationTimes("12",5);
+					});
+					document.getElementById("fillButton3").addEventListener("click", function(){
+						stTime.value="13:40";
+						enTime.value="15:20";
+						checkAllReservationTimes("12",5);
+					});
+					document.getElementById("fillButton4").addEventListener("click", function(){
+						stTime.value="15:30";
+						enTime.value="17:10";
+						checkAllReservationTimes("12",5);
+					});
+					document.getElementById("fillButton5").addEventListener("click", function(){
+						stTime.value="17:20";
+						enTime.value="19:00";
+						checkAllReservationTimes("12",5);
+					});
+				</script>
+				
+			</h3>
+		</div>
+
+		<p>　　<span style="background-color:skyblue">　</span>：空き　　<span style="background-color:orangered">　</span>：不可　　<span style="background-color:gray">　</span>：使用不可</p>
+		<div class = "box">
+			<div id = "mapContainer">
+				
+			<!--12号館1階-->
+			
+			<svg id="12_1F_SVG" xmlns="http://www.w3.org/2000/svg" width="750" height="422" version="1.1">
+				<image xlink:href="image/12_1F_map.png" width="750" height="422" />
+					<!-- 部屋ごとのクリッカブルな領域 -->
+					<rect x="534" y="285" width="167" height="87" data-room="11101" data-status="-1" />
+					<rect x="478" y="285" width="53" height="87" data-room="11104" data-status="1" />
+					<rect x="418" y="285" width="56" height="87" data-room="11105" data-status="1" />
+					<rect x="479" y="233" width="109" height="34" data-room="11106" data-status="1" />
+					<polygon points="336,286 367,286 367,328 351,329 351,361 339,361 337,360" data-room="12101A" data-status="1" />
+					<rect x="355" y="333" width="12" height="28" data-room="12101B" data-status="1" />
+					<rect x="311" y="349" width="20" height="12" data-room="12101C" data-status="1" />
+					<rect x="311" y="330" width="20" height="14" data-room="12101D" data-status="1" />
+					<rect x="311" y="308" width="20" height="17" data-room="12101E" data-status="1" />
+					<rect x="311" y="286" width="20" height="17" data-room="12101F" data-status="1" />
+					<rect x="202" y="286" width="105" height="75" data-room="12102" data-status="1" />
+					<rect x="33" y="286" width="128" height="75" data-room="12104A" data-status="1" />
+					<rect x="166" y="286" width="32" height="39" data-room="12104B" data-status="1" />
+					<rect x="166" y="330" width="32" height="32" data-room="12104C" data-status="1" />
+					<rect x="86" y="231" width="37" height="37" data-room="12107A" data-status="1" />
+					<rect x="127" y="231" width="37" height="37" data-room="12107B" data-status="1" />
+					<rect x="167" y="231" width="32" height="37" data-room="12108" data-status="1" />
+					<polygon points="199,156 367,156 367,190 326,190 326,227 199,226" data-room="12121A" data-status="1" />
+					<rect x="332" y="195" width="35" height="32" data-room="12121B" data-status="1" />
+					<polygon points="309,50 364,53 364,64 419,64 419,132 309,133 307,134" data-room="124" data-status="1" />
+			</svg>
+
+			<!--12号館2階-->
+			<svg id="12_2F_SVG" xmlns="http://www.w3.org/2000/svg" width="750" height="422" version="1.1">
+				<image xlink:href="image/12_2F_map.png" width="750" height="422" />
+				
+				<!-- クリッカブルな領域 -->
+				<rect x="642" y="285" width="59" height="86" data-room="11201" data-status="1" />
+				<rect x="589" y="285" width="49" height="20" data-room="11202A" data-status="1" />
+				<rect x="589" y="310" width="49" height="61" data-room="11202A" data-status="1" />
+				<rect x="534" y="285" width="50" height="45" data-room="11203A" data-status="1" />
+				<rect x="534" y="334" width="50" height="37" data-room="11203B" data-status="1" />
+				<rect x="499" y="285" width="30" height="86" data-room="11204" data-status="1" />
+				<rect x="419" y="285" width="75" height="86" data-room="11205" data-status="1" />
+				<rect x="480" y="233" width="20" height="34" data-room="11206A" data-status="1" />
+				<rect x="505" y="233" width="23" height="34" data-room="11206B" data-status="1" />
+				<rect x="532" y="233" width="50" height="34" data-room="11207" data-status="1" />
+				<polygon points="588,233 646,233 646,267 601,267 601,246 588,246" data-room="11208" data-status="1" />
+				<rect x="256" y="286" width="51" height="76" data-room="12202" data-status="1" />
+				<rect x="218" y="286" width="33" height="76" data-room="12203A" data-status="1" />
+				<rect x="182" y="286" width="32" height="76" data-room="12203B" data-status="1" />
+				<rect x="146" y="286" width="32" height="76" data-room="12204" data-status="1" />
+				<rect x="109" y="286" width="32" height="76" data-room="12205A" data-status="1" />
+				<rect x="70" y="286" width="34" height="76" data-room="12205B" data-status="1" />
+				<rect x="33" y="286" width="32" height="76" data-room="12206" data-status="1" />
+				<rect x="283" y="155" width="103" height="72" data-room="221" data-status="-1" />
+				<polygon points="308,49 365,53 365,132 309,133" data-room="224" data-status="-1" />
+				<rect x="370" y="64" width="51" height="69" data-room="225" data-status="-1" />
+				<rect x="424" y="63" width="52" height="73" data-room="226" data-status="-1" />
+				<rect x="479" y="63" width="53" height="71" data-room="227" data-status="-1" />
+				<rect x="535" y="64" width="52" height="72" data-room="228" data-status="-1" />
+				<rect x="591" y="65" width="57" height="72" data-room="229" data-status="-1" />
+			</svg>
+			
+			
+			<!--12号館3階-->	
+				<svg id="12_3F_SVG" xmlns="http://www.w3.org/2000/svg" width="750" height="422" version="1.1">
+					<image xlink:href="image/12_3F_map.png" width="750" height="422" />
+					
+					<!-- クリッカブルな領域 -->
+					<rect x="643" y="285" width="58" height="86" data-room="11301A" data-status="1" />
+					<rect x="589" y="285" width="50" height="86" data-room="11301B" data-status="1" />
+					<rect x="534" y="285" width="50" height="86" data-room="11301C" data-status="1" />
+					<rect x="482" y="285" width="47" height="86" data-room="11304" data-status="1" />
+					<rect x="419" y="285" width="58" height="40" data-room="11305A" data-status="1" />
+					<rect x="419" y="330" width="58" height="41" data-room="11305B" data-status="1" />
+					<rect x="532" y="232" width="50" height="35" data-room="11307" data-status="1" />
+					<rect x="479" y="232" width="50" height="35" data-room="11308" data-status="1" />
+					<polygon points="587,232 587,246 601,246 601,267 615,267 614,237 614,232" data-room="11308A" data-status="1" />
+					<rect x="619" y="232" width="27" height="35" data-room="11308B" data-status="1" />
+					<rect x="312" y="285" width="56" height="76" data-room="12301" data-status="1" />
+					<rect x="256" y="285" width="52" height="76" data-room="12302" data-status="1" />
+					<rect x="182" y="286" width="69" height="76" data-room="12303" data-status="1" />
+					<rect x="146" y="286" width="32" height="76" data-room="12304" data-status="1" />
+					<rect x="108" y="286" width="34" height="76" data-room="12305A" data-status="1" />
+					<rect x="70" y="286" width="34" height="76" data-room="12305B" data-status="1" />
+					<rect x="34" y="286" width="31" height="76" data-room="12306" data-status="1" />
+					<rect x="283" y="155" width="104" height="72" data-room="321" data-status="-1" />
+					<polygon points="308,48 365,52 365,132 308,132 308,132" data-room="324" data-status="-1" />
+					<rect x="370" y="64" width="50" height="71" data-room="325" data-status="-1" />
+					<rect x="424" y="64" width="53" height="72" data-room="326" data-status="-1" />
+					<rect x="479" y="64" width="53" height="72" data-room="327" data-status="-1" />
+					<rect x="535" y="64" width="53" height="71" data-room="328" data-status="-1" />
+					<rect x="590" y="64" width="57" height="72" data-room="329" data-status="-1" />
+				</svg>				
+			
+			<!--12号館4階-->	
+			<svg id="12_4F_SVG" xmlns="http://www.w3.org/2000/svg" width="750" height="422" version="1.1">
+				<image xlink:href="image/12_4F_map.png" width="750" height="422" />
+				
+				<!-- クリッカブルな領域 -->
+				<rect x="312" y="286" width="56" height="75" data-room="12041" data-status="1" />
+				<rect x="145" y="286" width="33" height="75" data-room="12404" data-status="1" />
+				<rect x="108" y="286" width="33" height="75" data-room="12405A" data-status="1" />
+				<rect x="70" y="286" width="33" height="75" data-room="12405B" data-status="1" />
+				<rect x="34" y="286" width="32" height="75" data-room="12406" data-status="1" />
+				<rect x="309" y="137" width="60" height="15" data-room="12434" data-status="1" />
+			</svg>
+			
+			<!--12号館5階-->
+			<svg id="12_5F_SVG" xmlns="http://www.w3.org/2000/svg" width="750" height="422" version="1.1">
+				<image xlink:href="image/12_5F_map.png" width="750" height="422" />
+				
+				<!-- クリッカブルな領域 -->
+				<rect x="330" y="286" width="38" height="75" data-room="12501A" data-status="1" />
+				<rect x="294" y="286" width="33" height="75" data-room="12501B" data-status="1" />
+				<rect x="258" y="286" width="32" height="75" data-room="12502" data-status="1" />
+				<rect x="221" y="286" width="33" height="75" data-room="12503A" data-status="1" />
+				<rect x="183" y="286" width="33" height="75" data-room="12503B" data-status="1" />
+				<rect x="145" y="286" width="33" height="75" data-room="12504" data-status="1" />
+				<rect x="108" y="286" width="33" height="75" data-room="12505A" data-status="1" />
+				<rect x="71" y="286" width="33" height="75" data-room="12505B" data-status="1" />
+				<rect x="33" y="286" width="33" height="75" data-room="12506" data-status="1" />
+			</svg>
+			
+				
+			</div>
+		</div>
+		<script>
+			handleMapClick("12_1F_SVG");
+			handleMapClick("12_2F_SVG");
+			handleMapClick("12_3F_SVG");
+			handleMapClick("12_4F_SVG");
+			handleMapClick("12_5F_SVG");
+ 		</script>
+		
+		<div id = "bottom">
+			<p>Tabekake - pudding</p><br>
+            <p>links</p>
+            <a href="https://www.dendai.ac.jp" style="color: white;">東京電機大学HP </a>
+
+        </div>
+
+	</body>
+</html>

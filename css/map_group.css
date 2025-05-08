@@ -1,0 +1,163 @@
+@charset "utf-8";
+
+*{
+    margin: 0;
+}
+
+#top1
+{
+    background-color: #593c22;
+    text-align: center;
+}
+
+#top1 img
+{
+    width: 7em;
+    margin-top: 2em;
+}
+
+#top2
+{
+    padding-top: 20px;
+    margin-bottom: 75px;
+    border-bottom: solid 3px #593c22;
+    font-size: 20px;
+    color:#593c22;
+    padding-left: 30px;
+}
+
+.linked-area {
+    border: 2px solid black;
+}
+
+.box
+{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 100px;
+    text-align: center;
+    background-color: #ffffff;
+
+    font-family: 'ＭＳ 明朝', serif;
+    font-size: 24px;
+    
+}
+
+#bottom
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    text-align: center;
+    background-color: #593c22;
+}
+
+#bottom img
+{
+    height: 10%;
+    width : 10%;
+}
+
+#mapContainer{
+    text-align:center;
+    position: relative;
+    z-index: 1;
+}
+
+#mapContainer img::before{
+    text-align:center;
+
+}
+
+rect[data-status="1"],
+polygon[data-status="1"],
+area[data-status="1"] {
+  fill: skyblue; /* 背景色をskyblueに設定 */
+  opacity: 0.5; /* 透明度を0.5に設定 */
+  cursor: pointer;
+}
+
+/* data-statusが0の場合 */
+rect[data-status="0"],
+polygon[data-status="0"],
+area[data-status="0"] {
+  fill: orangered; /* 背景色をorangeredに設定 */
+  opacity: 0.5; /* 透明度を0.5に設定 */
+  cursor: not-allowed;
+}
+
+rect[data-status="-1"],
+polygon[data-status="-1"],
+area[data-status="-1"] {
+  fill: #222222; 
+  opacity: 0.5; 
+}
+
+body
+{
+    background-color: #f8ebd0;
+}
+
+button{
+    font-size: 20px; 
+    font-family: Arial;
+}
+h2
+{
+    margin-top: 50px;
+    margin-right: 20px;
+    margin-left: 30px;
+
+    padding: 0.5em 0.5em;
+    border-left: solid 10px #593c22;
+    color: #593c22;
+}
+
+/* グローバルナビゲーション */
+*{box-sizing: border-box;}
+
+ul.gnav-navi-1{
+    background: #593c22;
+    /* padding: 0; */
+    text-align: center;
+}
+
+ul.gnav-navi-1 li{
+    display: inline-block;
+}
+
+ul.gnav-navi-1 li a{
+    display: block;
+    padding: 1em;
+    color: #fff;
+    text-decoration: none;
+}
+
+ul.gnav-navi-1 a::first-line{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+ul.gnav-navi-1 li:hover{
+    background: #dcdcdc50;
+}
+
+
+/* ================- Button =================== */
+.page_button{
+    background-color:#593c22;
+    border: none;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 25px;
+  }
+  
+  .buttoncenter{
+    text-align: center;
+    margin-top: 20px;   
+  }
+  /* ================ Button-fin ========= */

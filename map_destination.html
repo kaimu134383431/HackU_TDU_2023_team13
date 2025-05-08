@@ -1,0 +1,43 @@
+<!--情報入力ページとつなげる-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>受け取りページ</title>
+</head>
+<body>
+    <h1>受け取りページ</h1>
+    <p id="output"></p>
+    <p id="output2"></p>
+    <p id="output3"></p>
+
+    <script>
+        // クエリ文字列から値を取得する関数
+        function getQueryVariable(variable) {
+            const query = window.location.search.substring(1);
+            const vars = query.split('&');
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split('=');
+                if (pair[0] === variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            return null;
+        }
+
+        // クエリ文字列から値を取得して表示する
+        const room = getQueryVariable('room');
+        if (room !== null) {
+            document.getElementById('output').textContent = `受け取った部屋番号: ${room}`;
+        }
+        const time = getQueryVariable('time');
+        if (time !== null) {
+            document.getElementById('output2').textContent = `受け取った時間: ${time}`;
+        }
+        const date = getQueryVariable('date');
+        if (date !== null) {
+            document.getElementById('output3').textContent = `受け取った日付: ${date}`;
+        }
+    </script>
+</body>
+</html>

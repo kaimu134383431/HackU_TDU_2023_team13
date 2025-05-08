@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang = "ja">
+
+	<!-- Settings -->
+	<head>
+		<meta charset = "utf-8">
+		<title>検索-TDU教室予約</title>
+		<link rel="stylesheet" href="css/sch.css">
+
+		<script src="js/checkReservation.js"></script>
+		<script src="js/format.js"></script>
+		<script src="js/getCsv.js"></script>
+		<script src="js/handleMap.js"></script>
+	</head>
+
+	<!-- Page -->
+	<body>
+
+        <!-- ==================== Header ========================== -->
+
+        <div id = "top1">
+            <a href = "home.html"><img src = "image/pook_logo.png" style = "clip-path: circle(50%);pointer-events: auto;"></a>
+        </div>
+
+            <!-- グローバルナビゲーション -->
+            <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" href="css/home.css">
+            </head>
+                
+                
+                <nav>
+                <ul class="gnav-navi-1">
+                <li><a href="home.html">HOME<br>ホーム</a></li>
+                <li><a href="indiv.html">INDIVIDUAL<br>個人利用の方</a></li>
+                <li><a href="group.html">GROUP<br>学生団体の方</a></li>
+                <li><a href="inquiry.php">CONTACT<br>お問い合わせ</a></li>
+                </ul>
+                </nav>
+            <!--グローバルナビゲーション-fin-->
+
+        <div id = "top2">
+            <b>SEARCH - 検索</b>
+        </div>
+
+            <!-- ===================== Header-fin ====================== -->
+		
+		<h2 id="headline">予約したい日時</h2>
+
+		<div class = "space"></div>
+		
+		<div id="DayandTimeContainer">
+			<h3><label for="reservationDate">　予約日時:</label>
+				<input type="date" id="reservationDate" name="reservationDate" style="font-size: 20px; font-family: Arial;">
+				<span id="cautionReservation"></span>
+				
+				<label for="startTime">
+				<input type="time" id="startTime" name="startTime" style="font-size: 20px; font-family: Arial;">
+				～
+				<label for="endTime">
+					<input type="time" id="endTime" name="endTime" style="font-size: 20px; font-family: Arial;">
+				<script>
+					const reservatingDate = document.getElementById("reservationDate");
+					const stTime = document.getElementById("startTime");
+					const enTime = document.getElementById("endTime");
+					let isReservableDate = false;
+
+					reservatingDate.addEventListener("change", function(){
+						const currentDate = new Date();
+						const startReservationDate = new Date(currentDate);
+						const endReservationDate = new Date(currentDate);
+						const today = formatDate(currentDate);
+						
+						startReservationDate.setDate(currentDate.getDate() + 3); // 3日後の日付に変更
+						const after3days = formatDate(startReservationDate);
+						endReservationDate.setDate(currentDate.getDate() + 14); // 2週間後の日付に変更
+						const after2weeks = formatDate(endReservationDate);
+						
+						const recaution = document.getElementById("cautionReservation");
+						
+						checkAllReservationTimes();
+
+						if( today <= reservatingDate.value && reservatingDate.value < after3days ){
+							alert("表示できるのは3日後の予約状況からです。");
+							reservatingDate.value = "";
+							isReservableDate = false;
+						}
+						else if( after3days <= reservatingDate.value && reservatingDate.value <= after2weeks ){
+							recaution.innerHTML = "";
+							isReservableDate = true;
+						}
+						else{
+							recaution.innerHTML = "";
+							alert("表示できるのは本日から2週間後までです");
+    						reservatingDate.value = "";
+							isReservableDate = false;
+						}
+					});
+
+					stTime.addEventListener("change", function() {
+						checkAllReservationTimes();
+  					if (stTime.value && enTime.value && stTime.value >= enTime.value) {
+    					alert("開始時刻は終了時刻より後の時刻になるようにしてください。");
+    					stTime.value = "";
+  						}
+					});
+
+					enTime.addEventListener("change", function() {
+						checkAllReservationTimes();
+  					if (stTime.value && enTime.value && stTime.value >= enTime.value) {
+    					alert("開始時刻は終了時刻より後の時刻になるようにしてください。");
+    					enTime.value = "";
+  						}
+					});
+				</script>
+				<span>
+					<button type="button" id="fillButton1" period="1">①限</button>
+					<button type="button" id="fillButton2" period="2">②限</button>
+					<button type="button" id="fillButton3" period="3">③限</button>
+					<button type="button" id="fillButton4" period="4">④限</button>
+					<button type="button" id="fillButton5" period="5">⑤限</button>
+				</span>
+				<script>
+					document.getElementById("fillButton1").addEventListener("click", function(){
+						stTime.value="09:20";
+						enTime.value="11:00";
+						checkAllReservationTimes();
+					});
+					document.getElementById("fillButton2").addEventListener("click", function(){
+						stTime.value="11:10";
+						enTime.value="12:50";
+						checkAllReservationTimes();
+					});
+					document.getElementById("fillButton3").addEventListener("click", function(){
+						stTime.value="13:40";
+						enTime.value="15:20";
+						checkAllReservationTimes();
+					});
+					document.getElementById("fillButton4").addEventListener("click", function(){
+						stTime.value="15:30";
+						enTime.value="17:10";
+						checkAllReservationTimes();
+					});
+					document.getElementById("fillButton5").addEventListener("click", function(){
+						stTime.value="17:20";
+						enTime.value="19:00";
+						checkAllReservationTimes();
+					});
+				</script>
+				
+			</h3>
+		</div>
+
+		<h2>教室の大きさ</h2>
+
+		<div class = "space"></div>
+
+		<dvi id = "PeopleofUsersContainer">
+			<h3><label for="reservationUsers">　使用人数:</label>
+				<input type="number" id="reservationUsers" name="reservationUsers" min = "1" max = "1000" style="font-size: 20px; font-family: Arial;">
+			</h3>
+		</dvi>
+
+		<dvi id = "search">
+			<h3>
+				<button type=“button” id="button" onclick=define()>検索</button>
+			</h3>
+		</dvi>
+
+		<div class = "space"></div>
+		
+        <!-- Footer -->
+        <div id = "bottom">
+            <p>Tabekake - pudding</p><br>
+            <p>links</p>
+            <a href="https://www.dendai.ac.jp" style="color: white;">東京電機大学HP </a>
+
+        </div> 
+
+		<script>
+
+			const dateEntered = document.getElementById('reservationDate');
+			const timeSt = document.getElementById('startTime');
+			const timeEd = document.getElementById('endTime');
+			const numUsers = document.getElementById('reservationUsers');
+
+			function define()
+			{
+				if(dateEntered.value.length == 0 || timeSt.value.length == 0 || timeEd.value.length == 0 || numUsers.value.length == 0)
+				{
+					alert("すべての項目を入力してください。");
+					if(numUsers.value < 1 || numUsers.value > 1000)
+				{
+					alert("予約可能な人数は、1人~1000人です。");
+				}
+				}else{
+				if(numUsers.value < 1 || numUsers.value > 1000)
+				{
+					alert("予約可能な人数は、1人~1000人です。");
+				}
+					else window.location.href = `group_sch_ans.html?date=${dateEntered.value}&time=${timeSt.value}~${timeEd.value}&people=${numUsers.value}`
+				}
+			}
+			
+		</script>
+
+	</body>
+</html>

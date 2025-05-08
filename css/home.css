@@ -1,0 +1,143 @@
+/* ============================ Header ============================= */
+*{
+  margin: 0;
+}
+
+
+#top1
+{
+    background-color: #593c22;
+    text-align: center;
+}
+
+#top1 img
+{
+    width: 7em;
+    margin-top: 2em;
+}
+
+#top2
+{
+    padding-top: 20px;
+    margin-bottom: 75px;
+    border-bottom: solid 3px #593c22;
+    font-size: 20px;
+    color:#593c22;
+    padding-left: 30px;
+}
+
+/* ============================ Header-fin ========================= */
+
+#top3
+{
+    text-align: center;
+    margin-top: 30px;
+    background-color: #dcdcdc
+}
+
+body
+{
+    background-color: #f8ebd0;
+}
+
+h2
+{
+    margin-top: 30px;
+    margin-right: 20px;
+    margin-left: 30px;
+
+    padding: 0.5em 0.5em;
+    border-left: solid 10px #593c22;
+
+    color: #593c22;
+}
+
+.box
+{
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 100px;
+    margin-top: 10px;
+    /* border: 3px solid white; */
+    background-color: #ffffff
+}
+
+#bottom
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+    text-align: center;
+    background-color: #593c22
+}
+
+#icons li
+{
+    display: inline;
+    padding-right: 20px;
+}
+
+.boxc h4
+{
+    margin-top: 100px;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.boxc table
+{
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+/* グローバルナビゲーション */
+*{box-sizing: border-box;}
+
+ul.gnav-navi-1{
+    background: #593c22;
+    /* padding: 0; */
+    text-align: center;
+}
+
+ul.gnav-navi-1 li{
+    display: inline-block;
+}
+
+ul.gnav-navi-1 li a{
+    display: block;
+    padding: 1em;
+    color: #fff;
+    text-decoration: none;
+}
+
+ul.gnav-navi-1 a::first-line{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+ul.gnav-navi-1 li:hover{
+    background: #dcdcdc50;
+}
+
+/* ================- Button =================== */
+.page_button{
+  background-color:#593c22;
+  border: none;
+  padding: 10px 20px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 25px;
+}
+
+.buttoncenter{
+  text-align: center;
+  margin-top: 20px;   
+}
+/* ================ Button-fin ========= */
