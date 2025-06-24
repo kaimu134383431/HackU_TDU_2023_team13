@@ -6,7 +6,7 @@
 
 ## 使用技術
 - HTML / CSS / JavaScript
-- PHP（サーバーサイド）
+- PHP
 - CSVによるデータ提供
 
 ## 機能概要
